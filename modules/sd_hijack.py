@@ -239,8 +239,8 @@ class StableDiffusionModelHijack:
 
         self.layers = flatten(m)
 
-        if not hasattr(ldm.modules.diffusionmodules.openaimodel, 'copy_of_UNetModel_forward_for_webui'):
-            ldm.modules.diffusionmodules.openaimodel.copy_of_UNetModel_forward_for_webui = ldm.modules.diffusionmodules.openaimodel.UNetModel.forward
+        if not hasattr(ldm.modules.diffusionmodules.openaimodel, 'copy_of_UNetModel_forward_for_startfk'):
+            ldm.modules.diffusionmodules.openaimodel.copy_of_UNetModel_forward_for_startfk = ldm.modules.diffusionmodules.openaimodel.UNetModel.forward
 
         ldm.modules.diffusionmodules.openaimodel.UNetModel.forward = sd_unet.UNetModel_forward
 
@@ -279,7 +279,7 @@ class StableDiffusionModelHijack:
         self.layers = None
         self.clip = None
 
-        ldm.modules.diffusionmodules.openaimodel.UNetModel.forward = ldm.modules.diffusionmodules.openaimodel.copy_of_UNetModel_forward_for_webui
+        ldm.modules.diffusionmodules.openaimodel.UNetModel.forward = ldm.modules.diffusionmodules.openaimodel.copy_of_UNetModel_forward_for_startfk
 
     def apply_circular(self, enable):
         if self.circular_enabled == enable:
