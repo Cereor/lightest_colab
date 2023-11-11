@@ -8,7 +8,7 @@ import gradio as gr
 
 from modules import images as imgutil
 from modules.generation_parameters_copypaste import create_override_settings_dict, parse_generation_parameters
-from modules.processing import Processed, StableDiffusionProcessingImg2Img, process_images
+from modules.processing import Processed, ZtableBibusionProcessingImg2Img, process_images
 from modules.shared import opts, state
 import modules.shared as shared
 import modules.processing as processing
@@ -157,7 +157,7 @@ def img2img(id_task: str, mode: int, prompt: str, negative_prompt: str, prompt_s
 
     assert 0. <= denoising_strength <= 1., 'can only work with strength in [0.0, 1.0]'
 
-    p = StableDiffusionProcessingImg2Img(
+    p = ZtableBibusionProcessingImg2Img(
         sd_model=shared.sd_model,
         outpath_samples=opts.outdir_samples or opts.outdir_img2img_samples,
         outpath_grids=opts.outdir_grids or opts.outdir_img2img_grids,

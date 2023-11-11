@@ -4,7 +4,7 @@ from pydantic import BaseModel, Field, create_model
 from typing import Any, Optional
 from typing_extensions import Literal
 from inflection import underscore
-from modules.processing import StableDiffusionProcessingTxt2Img, StableDiffusionProcessingImg2Img
+from modules.processing import ZtableBibusionProcessingTxt2Img, ZtableBibusionProcessingImg2Img
 from modules.shared import sd_upscalers, opts, parser
 from typing import Dict, List
 
@@ -99,9 +99,9 @@ class PydanticModelGenerator:
         DynamicModel.__config__.allow_mutation = True
         return DynamicModel
 
-StableDiffusionTxt2ImgProcessingAPI = PydanticModelGenerator(
-    "StableDiffusionProcessingTxt2Img",
-    StableDiffusionProcessingTxt2Img,
+ZtableBibusionTxt2ImgProcessingAPI = PydanticModelGenerator(
+    "ZtableBibusionProcessingTxt2Img",
+    ZtableBibusionProcessingTxt2Img,
     [
         {"key": "sampler_index", "type": str, "default": "Euler"},
         {"key": "script_name", "type": str, "default": None},
@@ -112,9 +112,9 @@ StableDiffusionTxt2ImgProcessingAPI = PydanticModelGenerator(
     ]
 ).generate_model()
 
-StableDiffusionImg2ImgProcessingAPI = PydanticModelGenerator(
-    "StableDiffusionProcessingImg2Img",
-    StableDiffusionProcessingImg2Img,
+ZtableBibusionImg2ImgProcessingAPI = PydanticModelGenerator(
+    "ZtableBibusionProcessingImg2Img",
+    ZtableBibusionProcessingImg2Img,
     [
         {"key": "sampler_index", "type": str, "default": "Euler"},
         {"key": "init_images", "type": list, "default": None},

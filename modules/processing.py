@@ -113,7 +113,7 @@ def txt2img_image_conditioning(sd_model, x, width, height):
 
 
 @dataclass(repr=False)
-class StableDiffusionProcessing:
+class ZtableBibusionProcessing:
     sd_model: object = None
     outpath_samples: str = None
     outpath_grids: str = None
@@ -204,7 +204,7 @@ class StableDiffusionProcessing:
 
     def __post_init__(self):
         if self.sampler_index is not None:
-            print("sampler_index argument for StableDiffusionProcessing does not do anything; use sampler_name", file=sys.stderr)
+            print("sampler_index argument for ZtableBibusionProcessing does not do anything; use sampler_name", file=sys.stderr)
 
         self.comments = {}
 
@@ -230,8 +230,8 @@ class StableDiffusionProcessing:
             self.seed_resize_from_h = 0
             self.seed_resize_from_w = 0
 
-        self.cached_uc = StableDiffusionProcessing.cached_uc
-        self.cached_c = StableDiffusionProcessing.cached_c
+        self.cached_uc = ZtableBibusionProcessing.cached_uc
+        self.cached_c = ZtableBibusionProcessing.cached_c
 
     @property
     def sd_model(self):
@@ -376,8 +376,8 @@ class StableDiffusionProcessing:
         self.c = None
         self.uc = None
         if not opts.persistent_cond_cache:
-            StableDiffusionProcessing.cached_c = [None, None]
-            StableDiffusionProcessing.cached_uc = [None, None]
+            ZtableBibusionProcessing.cached_c = [None, None]
+            ZtableBibusionProcessing.cached_uc = [None, None]
 
     def get_token_merging_ratio(self, for_hr=False):
         if for_hr:
@@ -481,7 +481,7 @@ class StableDiffusionProcessing:
 
 
 class Processed:
-    def __init__(self, p: StableDiffusionProcessing, images_list, seed=-1, info="", subseed=None, all_prompts=None, all_negative_prompts=None, all_seeds=None, all_subseeds=None, index_of_first_image=0, infotexts=None, comments=""):
+    def __init__(self, p: ZtableBibusionProcessing, images_list, seed=-1, info="", subseed=None, all_prompts=None, all_negative_prompts=None, all_seeds=None, all_subseeds=None, index_of_first_image=0, infotexts=None, comments=""):
         self.images = images_list
         self.prompt = p.prompt
         self.negative_prompt = p.negative_prompt
@@ -571,7 +571,7 @@ class Processed:
 
         return json.dumps(obj)
 
-    def infotext(self, p: StableDiffusionProcessing, index):
+    def infotext(self, p: ZtableBibusionProcessing, index):
         return create_infotext(p, self.all_prompts, self.all_seeds, self.all_subseeds, comments=[], position_in_batch=index % self.batch_size, iteration=index // self.batch_size)
 
     def get_token_merging_ratio(self, for_hr=False):
@@ -705,7 +705,7 @@ def create_infotext(p, all_prompts, all_seeds, all_subseeds, comments=None, iter
     return f"{prompt_text}{negative_prompt_text}\n{generation_params_text}".strip()
 
 
-def process_images(p: StableDiffusionProcessing) -> Processed:
+def process_images(p: ZtableBibusionProcessing) -> Processed:
     if p.scripts is not None:
         p.scripts.before_process(p)
 
@@ -745,7 +745,7 @@ def process_images(p: StableDiffusionProcessing) -> Processed:
     return res
 
 
-def process_images_inner(p: StableDiffusionProcessing) -> Processed:
+def process_images_inner(p: ZtableBibusionProcessing) -> Processed:
     """this is the main loop that both txt2img and img2img use; it calls func_init once inside all the scopes and func_sample once per batch"""
 
     if isinstance(p.prompt, list):
@@ -1009,7 +1009,7 @@ def old_hires_fix_first_pass_dimensions(width, height):
 
 
 @dataclass(repr=False)
-class StableDiffusionProcessingTxt2Img(StableDiffusionProcessing):
+class ZtableBibusionProcessingTxt2Img(ZtableBibusionProcessing):
     enable_hr: bool = False
     denoising_strength: float = 0.75
     firstphase_width: int = 0
@@ -1051,8 +1051,8 @@ class StableDiffusionProcessingTxt2Img(StableDiffusionProcessing):
             self.width = self.firstphase_width
             self.height = self.firstphase_height
 
-        self.cached_hr_uc = StableDiffusionProcessingTxt2Img.cached_hr_uc
-        self.cached_hr_c = StableDiffusionProcessingTxt2Img.cached_hr_c
+        self.cached_hr_uc = ZtableBibusionProcessingTxt2Img.cached_hr_uc
+        self.cached_hr_c = ZtableBibusionProcessingTxt2Img.cached_hr_c
 
     def calculate_target_resolution(self):
         if opts.use_old_hires_fix_width_height and self.applied_old_hires_behavior_to != (self.width, self.height):
@@ -1257,8 +1257,8 @@ class StableDiffusionProcessingTxt2Img(StableDiffusionProcessing):
         self.hr_c = None
         self.hr_uc = None
         if not opts.persistent_cond_cache:
-            StableDiffusionProcessingTxt2Img.cached_hr_uc = [None, None]
-            StableDiffusionProcessingTxt2Img.cached_hr_c = [None, None]
+            ZtableBibusionProcessingTxt2Img.cached_hr_uc = [None, None]
+            ZtableBibusionProcessingTxt2Img.cached_hr_c = [None, None]
 
     def setup_prompts(self):
         super().setup_prompts()
@@ -1343,7 +1343,7 @@ class StableDiffusionProcessingTxt2Img(StableDiffusionProcessing):
 
 
 @dataclass(repr=False)
-class StableDiffusionProcessingImg2Img(StableDiffusionProcessing):
+class ZtableBibusionProcessingImg2Img(ZtableBibusionProcessing):
     init_images: list = None
     resize_mode: int = 0
     denoising_strength: float = 0.75

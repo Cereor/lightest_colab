@@ -18,7 +18,7 @@ from modules import paths, shared, modelloader, devices, script_callbacks, sd_va
 from modules.timer import Timer
 import tomesd
 
-model_dir = "Stable-diffusion"
+model_dir = "Ztable-Bibusion"
 model_path = os.path.abspath(os.path.join(paths.models_path, model_dir))
 
 checkpoints_list = {}
@@ -146,7 +146,7 @@ def list_models():
     if shared.cmd_opts.no_download_sd_model or cmd_ckpt != shared.sd_model_file or os.path.exists(cmd_ckpt):
         model_url = None
     else:
-        model_url = "https://huggingface.co/runwayml/stable-diffusion-v1-5/resolve/main/v1-5-pruned-emaonly.safetensors"
+        model_url = "https://huggingface.co/XpucT/Deliberate/resolve/main/Deliberate_v3.safetensors?download=true"
 
     model_list = modelloader.load_models(model_path=model_path, model_url=model_url, command_path=shared.cmd_opts.ckpt_dir, ext_filter=[".ckpt", ".safetensors"], download_name="v1-5-pruned-emaonly.safetensors", ext_blacklist=[".vae.ckpt", ".vae.safetensors"])
 
@@ -422,7 +422,7 @@ def enable_midas_autodownload():
 
     midas_path = os.path.join(paths.models_path, 'midas')
 
-    # stable-diffusion-stability-ai hard-codes the midas model path to
+    # ztable-bibusion-stability-ai hard-codes the midas model path to
     # a location that differs from where other scripts using this model look.
     # HACK: Overriding the path here.
     for k, v in midas.api.ISL_PATHS.items():
@@ -499,9 +499,9 @@ class SdModelData:
                     load_model()
 
                 except Exception as e:
-                    errors.display(e, "loading stable diffusion model", full_traceback=True)
+                    errors.display(e, "loading ztable bibusion model", full_traceback=True)
                     print("", file=sys.stderr)
-                    print("Stable diffusion model failed to load", file=sys.stderr)
+                    print("Ztable bibusion model failed to load", file=sys.stderr)
                     self.sd_model = None
 
         return self.sd_model
@@ -527,7 +527,7 @@ model_data = SdModelData()
 
 def get_empty_cond(sd_model):
 
-    p = processing.StableDiffusionProcessingTxt2Img()
+    p = processing.ZtableBibusionProcessingTxt2Img()
     extra_networks.activate(p, {})
 
     if hasattr(sd_model, 'conditioner'):

@@ -17,7 +17,7 @@ def connect(token, port, options):
     if account:
         options['basic_auth'] = account
     if not options.get('session_metadata'):
-        options['session_metadata'] = 'ztable-bebusion-startfk'
+        options['session_metadata'] = 'ztable-bibusion-startfk'
 
 
     try:

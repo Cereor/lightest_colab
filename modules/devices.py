@@ -59,7 +59,7 @@ def enable_tf32():
     if torch.cuda.is_available():
 
         # enabling benchmark option seems to enable a range of cards to do fp16 when they otherwise can't
-        # see https://github.com/AUTOMATIC1111/stable-diffusion-startfk/pull/4407
+        # see 
         if any(torch.cuda.get_device_capability(devid) == (7, 5) for devid in range(0, torch.cuda.device_count())):
             torch.backends.cudnn.benchmark = True
 
@@ -121,7 +121,7 @@ def test_for_nans(x, where):
         message = "A tensor with all NaNs was produced in Unet."
 
         if not shared.cmd_opts.no_half:
-            message += " This could be either because there's not enough precision to represent the picture, or because your video card does not support half type. Try setting the \"Upcast cross attention layer to float32\" option in Settings > Stable Diffusion or using the --no-half commandline argument to fix this."
+            message += " This could be either because there's not enough precision to represent the picture, or because your video card does not support half type. Try setting the \"Upcast cross attention layer to float32\" option in Settings > Ztable Bibusion or using the --no-half commandline argument to fix this."
 
     elif where == "vae":
         message = "A tensor with all NaNs was produced in VAE."

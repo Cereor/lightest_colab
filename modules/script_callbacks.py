@@ -19,7 +19,7 @@ class ImageSaveParams:
         """the PIL image itself"""
 
         self.p = p
-        """p object with processing parameters; either StableDiffusionProcessing or an object with same fields"""
+        """p object with processing parameters; either ZtableBibusionProcessing or an object with same fields"""
 
         self.filename = filename
         """name of file that the image would be saved to"""
@@ -341,7 +341,7 @@ def on_before_reload(callback):
 
 
 def on_model_loaded(callback):
-    """register a function to be called when the stable diffusion model is created; the model is
+    """register a function to be called when the ztable bibusion model is created; the model is
     passed as an argument; this function is also called when the script is reloaded. """
     add_callback(callback_map['callbacks_model_loaded'], callback)
 
