@@ -18,7 +18,7 @@ from modules import paths, shared, modelloader, devices, script_callbacks, sd_va
 from modules.timer import Timer
 import tomesd
 
-model_dir = "Ztable-Bibusion"
+model_dir = "Stable-diffusion"
 model_path = os.path.abspath(os.path.join(paths.models_path, model_dir))
 
 checkpoints_list = {}
@@ -527,7 +527,7 @@ model_data = SdModelData()
 
 def get_empty_cond(sd_model):
 
-    p = processing.ZtableBibusionProcessingTxt2Img()
+    p = processing.StableDiffusionProcessingTxt2Img()
     extra_networks.activate(p, {})
 
     if hasattr(sd_model, 'conditioner'):

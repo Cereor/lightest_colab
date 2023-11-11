@@ -8,7 +8,7 @@ import gradio as gr
 
 from modules import images as imgutil
 from modules.generation_parameters_copypaste import create_override_settings_dict, parse_generation_parameters
-from modules.processing import Processed, ZtableBibusionProcessingImg2Img, process_images
+from modules.processing import Processed, StableDiffusionProcessingImg2Img, process_images
 from modules.shared import opts, state
 import modules.shared as shared
 import modules.processing as processing

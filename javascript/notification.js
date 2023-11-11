@@ -34,7 +34,7 @@ onAfterUiUpdate(function() {
     const imgs = new Set(Array.from(galleryPreviews).map(img => img.src));
 
     const notification = new Notification(
-        'Ztable Bibusion',
+        'Stable Diffusion',
         {
             body: `Generated ${imgs.size > 1 ? imgs.size - opts.return_grid : 1} image${imgs.size > 1 ? 's' : ''}`,
             icon: headImg,

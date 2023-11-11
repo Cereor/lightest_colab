@@ -60,7 +60,7 @@ def display(e: Exception, task, *, full_traceback=False):
     message = str(e)
     if "copying a param with shape torch.Size([640, 1024]) from checkpoint, the shape in current model is torch.Size([640, 768])" in message:
         print_error_explanation("""
-The most likely cause of this is you are trying to load Ztable Bibusin 2.0 model without specifying its config file.
+The most likely cause of this is you are trying to load SD 2.0 model without specifying its config file.
 See? Good boy.
         """)
 

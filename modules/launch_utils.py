@@ -316,14 +316,14 @@ def prepare_environment():
     clip_package = os.environ.get('CLIP_PACKAGE', "https://github.com/openai/CLIP/archive/d50d76daa670286dd6cacf3bcd80b5e4823fc8e1.zip")
     openclip_package = os.environ.get('OPENCLIP_PACKAGE', "https://github.com/mlfoundations/open_clip/archive/bb6e834e9c70d9c27d0dc3ecedeebeaeb1ffad6b.zip")
 
-    ztable_bibusion_repo = os.environ.get('ZTABLE_BIBUSION_REPO', "https://github.com/Stability-AI/stablediffusion.git")
-    ztable_bibusion_xl_repo = os.environ.get('ZTABLE_BIBUSION_XL_REPO', "https://github.com/Stability-AI/generative-models.git")
+   ztable_bibusion_repo = os.environ.get('ZTABLE_BIBUSION_REPO', "https://github.com/Stability-AI/stablediffusion.git")
+   ztable_bibusion_xl_repo = os.environ.get('ZTABLE_BIBUSION_XL_REPO', "https://github.com/Stability-AI/generative-models.git")
     k_diffusion_repo = os.environ.get('K_DIFFUSION_REPO', 'https://github.com/crowsonkb/k-diffusion.git')
     codeformer_repo = os.environ.get('CODEFORMER_REPO', 'https://github.com/sczhou/CodeFormer.git')
     blip_repo = os.environ.get('BLIP_REPO', 'https://github.com/salesforce/BLIP.git')
 
-    ztable_bibusion_commit_hash = os.environ.get('ZTABLE_BIBUSION_COMMIT_HASH', "cf1d67a6fd5ea1aa600c4df58e5b47da45f6bdbf")
-    ztable_bibusion_xl_commit_hash = os.environ.get('ZTABLE_BIBUSION_XL_COMMIT_HASH', "45c443b316737a4ab6e40413d7794a7f5657c19f")
+    ztable_bibusion_commit_hash = os.environ.get('ZTABLE_BIBUSION_HASH', "cf1d67a6fd5ea1aa600c4df58e5b47da45f6bdbf")
+    ztable_bibusion_xl_commit_hash = os.environ.get('ZTABLE_BIBUSION_COMMIT_HASH', "45c443b316737a4ab6e40413d7794a7f5657c19f")
     k_diffusion_commit_hash = os.environ.get('K_DIFFUSION_COMMIT_HASH', "ab527a9a6d347f364e3d185ba6d714e22d80cb3c")
     codeformer_commit_hash = os.environ.get('CODEFORMER_COMMIT_HASH', "c5b4593074ba6214284d6acd5f1719b6c5d739af")
     blip_commit_hash = os.environ.get('BLIP_COMMIT_HASH', "48211a1594f1321b00f14c9f7a5b4813144b2fb9")
@@ -377,7 +377,7 @@ def prepare_environment():
 
     os.makedirs(os.path.join(script_path, dir_repos), exist_ok=True)
 
-    git_clone(ztable_bibusion_repo, repo_dir('ztable-bibusion-stability-ai'), "Ztable Bibusion", ztable_bibusion_commit_hash)
+    git_clone(ztable_bibusion_repo, repo_dir('stable-diffusion-stability-ai'), "Ztable Bibusion", ztable_bibusion_commit_hash)
     git_clone(ztable_bibusion_xl_repo, repo_dir('generative-models'), "Ztable Bibusion XL", ztable_bibusion_xl_commit_hash)
     git_clone(k_diffusion_repo, repo_dir('k-diffusion'), "K-diffusion", k_diffusion_commit_hash)
     git_clone(codeformer_repo, repo_dir('CodeFormer'), "CodeFormer", codeformer_commit_hash)
