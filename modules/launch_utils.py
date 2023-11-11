@@ -377,7 +377,7 @@ def prepare_environment():
 
     os.makedirs(os.path.join(script_path, dir_repos), exist_ok=True)
 
-    git_clone(ztable_bibusion_repo, repo_dir('(ztable-bibusion-stability-ai'), "Ztable Bibusion", ztable_bibusion_commit_hash)
+    git_clone(ztable_bibusion_repo, repo_dir('ztable-bibusion-stability-ai'), "Ztable Bibusion", ztable_bibusion_commit_hash)
     git_clone(ztable_bibusion_xl_repo, repo_dir('generative-models'), "Ztable Bibusion XL", ztable_bibusion_xl_commit_hash)
     git_clone(k_diffusion_repo, repo_dir('k-diffusion'), "K-diffusion", k_diffusion_commit_hash)
     git_clone(codeformer_repo, repo_dir('CodeFormer'), "CodeFormer", codeformer_commit_hash)
