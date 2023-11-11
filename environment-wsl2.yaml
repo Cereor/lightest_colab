@@ -1,4 +1,4 @@
-name: automatic
+name: automat
 channels:
   - pytorch
   - defaults

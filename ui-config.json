@@ -694,5 +694,5 @@
     "train/Choose latent sampling method/value": "once",
     "train/Train Embedding/visible": true,
     "train/Train Hypernetwork/visible": true,
-    "webui/Tabs@tabs/selected": null
+    "startfk/Tabs@tabs/selected": null
 }
