@@ -18,7 +18,7 @@ from modules import paths, shared, modelloader, devices, script_callbacks, sd_va
 from modules.timer import Timer
 import tomesd
 
-model_dir = "Stable-diffusion"
+model_dir = "SD"
 model_path = os.path.abspath(os.path.join(paths.models_path, model_dir))
 
 checkpoints_list = {}
