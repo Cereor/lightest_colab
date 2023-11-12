@@ -18,8 +18,9 @@ from modules import paths, shared, modelloader, devices, script_callbacks, sd_va
 from modules.timer import Timer
 import tomesd
 
-model_dir = "Stable-diffusion"
-model_path = os.path.abspath(os.path.join(paths.models_path, model_dir))
+model_dir = "Stable-diffusion";
+model_path = os.path.abspath(os.path.join(paths.models_path, model_dir));
+
 
 checkpoints_list = {}
 checkpoint_aliases = {}
@@ -266,9 +267,7 @@ def read_metadata_from_safetensors(filename):
         metadata_len = int.from_bytes(metadata_len, "little")
         json_start = file.read(2)
 
-        assert metadata_len > 2 and json_start in (b'{"', b"{'"), f"{filename} is not a safetensors file"
-        json_data = json_start + file.read(metadata_len-2)
-        json_obj = json.loads(json_data)
+        
 
         res = {}
         for k, v in json_obj.get("__metadata__", {}).items():

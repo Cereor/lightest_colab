@@ -14,6 +14,8 @@ import lark
 # [100, 'fantasy landscape with a lake and a christmas tree in background masterful']
 
 schedule_parser = lark.Lark(r"""
+
+
 !start: (prompt | /[][():]/+)*
 prompt: (emphasized | scheduled | alternate | plain | WHITESPACE)*
 !emphasized: "(" prompt ")"

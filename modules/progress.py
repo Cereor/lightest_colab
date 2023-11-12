@@ -24,7 +24,9 @@ def start_task(id_task):
     pending_tasks.pop(id_task, None)
 
 
+
 def finish_task(id_task):
+    
     global current_task
 
     if current_task == id_task:
@@ -33,6 +35,7 @@ def finish_task(id_task):
     finished_tasks.append(id_task)
     if len(finished_tasks) > 16:
         finished_tasks.pop(0)
+
 
 
 def record_results(id_task, res):
@@ -116,7 +119,7 @@ def progressapi(req: ProgressRequest):
                     save_kwargs = {}
 
                 image.save(buffered, format=opts.live_previews_image_format, **save_kwargs)
-                base64_image = base64.b64encode(buffered.getvalue()).decode('ascii')
+                base64_image = base64.b64encode(buffered.getvalue()).decode("ascii")
                 live_preview = f"data:image/{opts.live_previews_image_format};base64,{base64_image}"
                 id_live_preview = shared.state.id_live_preview
 
@@ -131,4 +134,4 @@ def restore_progress(id_task):
     if res is not None:
         return res
 
-    return gr.update(), gr.update(), gr.update(), f"Couldn't restore progress for {id_task}: results either have been discarded or never were obtained"
+    return gr.update(), gr.update(), gr.update(), f"Couldn"t restore progress for {id_task}: results either have been discarded or never were obtained"

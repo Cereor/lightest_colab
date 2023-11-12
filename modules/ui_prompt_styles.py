@@ -6,6 +6,8 @@ styles_edit_symbol = '\U0001f58c\uFE0F'  # 🖌️
 styles_materialize_symbol = '\U0001f4cb'  # 📋
 
 
+
+
 def select_style(name):
     style = shared.prompt_styles.styles.get(name)
     existing = style is not None
@@ -13,6 +15,7 @@ def select_style(name):
 
     prompt = style.prompt if style else gr.update()
     negative_prompt = style.negative_prompt if style else gr.update()
+    
 
     return prompt, negative_prompt, gr.update(visible=existing), gr.update(visible=not empty)
 

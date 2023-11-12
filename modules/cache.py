@@ -6,15 +6,18 @@ import time
 
 from modules.paths import data_path, script_path
 
-cache_filename = os.environ.get('SD_START_CACHE_FILE', os.path.join(data_path, "cache.json"))
+cache_filename = os.environ.get("SD_START_CACHE_FILE", os.path.join(data_path, "cache.json"))
 cache_data = None
 cache_lock = threading.Lock()
+
+
 
 dump_cache_after = None
 dump_cache_thread = None
 
 
 def dump_cache():
+    
     """
     Marks cache for writing to disk. 5 seconds after no one else flags the cache for writing, it is written.
     """
@@ -42,7 +45,7 @@ def dump_cache():
     with cache_lock:
         dump_cache_after = time.time() + 5
         if dump_cache_thread is None:
-            dump_cache_thread = threading.Thread(name='cache-writer', target=thread_func)
+            dump_cache_thread = threading.Thread(name="cache-writer", target=thread_func)
             dump_cache_thread.start()
 
 
@@ -70,7 +73,7 @@ def cache(subsection):
                             cache_data = json.load(file)
                     except Exception:
                         os.replace(cache_filename, os.path.join(script_path, "tmp", "cache.json"))
-                        print('[ERROR] issue occurred while trying to read cache.json, move current cache to tmp/cache.json and create new cache')
+                        print("[ERROR] issue occurred while trying to read cache.json, move current cache to tmp/cache.json and create new cache")
                         cache_data = {}
 
     s = cache_data.get(subsection, {})
@@ -102,6 +105,7 @@ def cached_data_for_file(subsection, title, filename, func):
     or cached data is returned as a dictionary.
     """
 
+    
     existing_cache = cache(subsection)
     ondisk_mtime = os.path.getmtime(filename)
 
@@ -111,14 +115,14 @@ def cached_data_for_file(subsection, title, filename, func):
         if ondisk_mtime > cached_mtime:
             entry = None
 
-    if not entry or 'value' not in entry:
+    if not entry or "value" not in entry:
         value = func()
         if value is None:
             return None
 
-        entry = {'mtime': ondisk_mtime, 'value': value}
+        entry = {"mtime": ondisk_mtime, "value": value}
         existing_cache[title] = entry
 
         dump_cache()
 
-    return entry['value']
+    return entry["value"]

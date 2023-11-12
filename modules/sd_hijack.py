@@ -14,17 +14,21 @@ import ldm.models.diffusion.ddim
 import ldm.models.diffusion.plms
 import ldm.modules.encoders.modules
 
+
+
+
 import sgm.modules.attention
 import sgm.modules.diffusionmodules.model
 import sgm.modules.diffusionmodules.openaimodel
 import sgm.modules.encoders.modules
+
 
 attention_CrossAttention_forward = ldm.modules.attention.CrossAttention.forward
 diffusionmodules_model_nonlinearity = ldm.modules.diffusionmodules.model.nonlinearity
 diffusionmodules_model_AttnBlock_forward = ldm.modules.diffusionmodules.model.AttnBlock.forward
 
 # new memory efficient cross attention blocks do not support hypernets and we already
-# have memory efficient cross attention anyway, so this disables SD2.0's memory efficient cross attention
+# have memory efficient cross attention anyway, so this disables SD2.0"s memory efficient cross attention
 ldm.modules.attention.MemoryEfficientCrossAttention = ldm.modules.attention.CrossAttention
 ldm.modules.attention.BasicTransformerBlock.ATTENTION_MODES["softmax-xformers"] = ldm.modules.attention.CrossAttention
 
@@ -57,7 +61,7 @@ def apply_optimizations(option=None):
     if len(optimizers) == 0:
         # a script can access the model very early, and optimizations would not be filled by then
         current_optimizer = None
-        return ''
+        return ""
 
     ldm.modules.diffusionmodules.model.nonlinearity = silu
     ldm.modules.diffusionmodules.openaimodel.th = sd_hijack_unet.th
@@ -83,14 +87,14 @@ def apply_optimizations(option=None):
         matching_optimizer = optimizers[0]
 
     if matching_optimizer is not None:
-        print(f"Applying attention optimization: {matching_optimizer.name}... ", end='')
+        print(f"Applying attention optimization: {matching_optimizer.name}... ", end="")
         matching_optimizer.apply()
         print("done.")
         current_optimizer = matching_optimizer
         return current_optimizer.name
     else:
         print("Disabling attention optimization")
-        return ''
+        return ""
 
 
 def undo_optimizations():
@@ -104,8 +108,8 @@ def undo_optimizations():
 
 
 def fix_checkpoint():
-    """checkpoints are now added and removed in embedding/hypernet code, since torch doesn't want
-    checkpoints to be added when not training (there's a warning)"""
+    """checkpoints are now added and removed in embedding/hypernet code, since torch doesn"t want
+    checkpoints to be added when not training (there"s a warning)"""
 
     pass
 
@@ -115,7 +119,7 @@ def weighted_loss(sd_model, pred, target, mean=True):
     loss = sd_model._old_get_loss(pred, target, mean=False)
 
     #Check if we have weights available
-    weight = getattr(sd_model, '_custom_loss_weight', None)
+    weight = getattr(sd_model, "_custom_loss_weight", None)
     if weight is not None:
         loss *= weight
 
@@ -127,13 +131,13 @@ def weighted_forward(sd_model, x, c, w, *args, **kwargs):
         #Temporarily append weights to a place accessible during loss calc
         sd_model._custom_loss_weight = w
 
-        #Replace 'get_loss' with a weight-aware one. Otherwise we need to reimplement 'forward' completely
-        #Keep 'get_loss', but don't overwrite the previous old_get_loss if it's already set
-        if not hasattr(sd_model, '_old_get_loss'):
+        #Replace "get_loss" with a weight-aware one. Otherwise we need to reimplement "forward" completely
+        #Keep "get_loss", but don"t overwrite the previous old_get_loss if it"s already set
+        if not hasattr(sd_model, "_old_get_loss"):
             sd_model._old_get_loss = sd_model.get_loss
         sd_model.get_loss = MethodType(weighted_loss, sd_model)
 
-        #Run the standard forward function, but with the patched 'get_loss'
+        #Run the standard forward function, but with the patched "get_loss"
         return sd_model.forward(x, c, *args, **kwargs)
     finally:
         try:
@@ -143,12 +147,12 @@ def weighted_forward(sd_model, x, c, w, *args, **kwargs):
             pass
 
         #If we have an old loss function, reset the loss function to the original one
-        if hasattr(sd_model, '_old_get_loss'):
+        if hasattr(sd_model, "_old_get_loss"):
             sd_model.get_loss = sd_model._old_get_loss
             del sd_model._old_get_loss
 
 def apply_weighted_forward(sd_model):
-    #Add new function 'weighted_forward' that can be called to calc weighted loss
+    #Add new function "weighted_forward" that can be called to calc weighted loss
     sd_model.weighted_forward = MethodType(weighted_forward, sd_model)
 
 def undo_weighted_forward(sd_model):
@@ -182,24 +186,24 @@ class StableDiffusionModelHijack:
             undo_optimizations()
 
     def hijack(self, m):
-        conditioner = getattr(m, 'conditioner', None)
+        conditioner = getattr(m, "conditioner", None)
         if conditioner:
             text_cond_models = []
 
             for i in range(len(conditioner.embedders)):
                 embedder = conditioner.embedders[i]
                 typename = type(embedder).__name__
-                if typename == 'FrozenOpenCLIPEmbedder':
+                if typename == "FrozenOpenCLIPEmbedder":
                     embedder.model.token_embedding = EmbeddingsWithFixes(embedder.model.token_embedding, self)
                     conditioner.embedders[i] = sd_hijack_open_clip.FrozenOpenCLIPEmbedderWithCustomWords(embedder, self)
                     text_cond_models.append(conditioner.embedders[i])
-                if typename == 'FrozenCLIPEmbedder':
+                if typename == "FrozenCLIPEmbedder":
                     model_embeddings = embedder.transformer.text_model.embeddings
                     model_embeddings.token_embedding = EmbeddingsWithFixes(model_embeddings.token_embedding, self)
                     conditioner.embedders[i] = sd_hijack_clip.FrozenCLIPEmbedderForSDXLWithCustomWords(embedder, self)
                     text_cond_models.append(conditioner.embedders[i])
-                if typename == 'FrozenOpenCLIPEmbedder2':
-                    embedder.model.token_embedding = EmbeddingsWithFixes(embedder.model.token_embedding, self, textual_inversion_key='clip_g')
+                if typename == "FrozenOpenCLIPEmbedder2":
+                    embedder.model.token_embedding = EmbeddingsWithFixes(embedder.model.token_embedding, self, textual_inversion_key="clip_g")
                     conditioner.embedders[i] = sd_hijack_open_clip.FrozenOpenCLIPEmbedder2WithCustomWords(embedder, self)
                     text_cond_models.append(conditioner.embedders[i])
 
@@ -239,13 +243,13 @@ class StableDiffusionModelHijack:
 
         self.layers = flatten(m)
 
-        if not hasattr(ldm.modules.diffusionmodules.openaimodel, 'copy_of_UNetModel_forward_for_startfk'):
+        if not hasattr(ldm.modules.diffusionmodules.openaimodel, "copy_of_UNetModel_forward_for_startfk"):
             ldm.modules.diffusionmodules.openaimodel.copy_of_UNetModel_forward_for_startfk = ldm.modules.diffusionmodules.openaimodel.UNetModel.forward
 
         ldm.modules.diffusionmodules.openaimodel.UNetModel.forward = sd_unet.UNetModel_forward
 
     def undo_hijack(self, m):
-        conditioner = getattr(m, 'conditioner', None)
+        conditioner = getattr(m, "conditioner", None)
         if conditioner:
             for i in range(len(conditioner.embedders)):
                 embedder = conditioner.embedders[i]
@@ -256,8 +260,8 @@ class StableDiffusionModelHijack:
                     embedder.wrapped.transformer.text_model.embeddings.token_embedding = embedder.wrapped.transformer.text_model.embeddings.token_embedding.wrapped
                     conditioner.embedders[i] = embedder.wrapped
 
-            if hasattr(m, 'cond_stage_model'):
-                delattr(m, 'cond_stage_model')
+            if hasattr(m, "cond_stage_model"):
+                delattr(m, "cond_stage_model")
 
         elif type(m.cond_stage_model) == sd_hijack_xlmr.FrozenXLMREmbedderWithCustomWords:
             m.cond_stage_model = m.cond_stage_model.wrapped
@@ -288,7 +292,7 @@ class StableDiffusionModelHijack:
         self.circular_enabled = enable
 
         for layer in [layer for layer in self.layers if type(layer) == torch.nn.Conv2d]:
-            layer.padding_mode = 'circular' if enable else 'zeros'
+            layer.padding_mode = "circular" if enable else "zeros"
 
     def clear_comments(self):
         self.comments = []
@@ -308,7 +312,7 @@ class StableDiffusionModelHijack:
 
 
 class EmbeddingsWithFixes(torch.nn.Module):
-    def __init__(self, wrapped, embeddings, textual_inversion_key='clip_l'):
+    def __init__(self, wrapped, embeddings, textual_inversion_key="clip_l"):
         super().__init__()
         self.wrapped = wrapped
         self.embeddings = embeddings
@@ -340,7 +344,7 @@ def add_circular_option_to_conv_2d():
     conv2d_constructor = torch.nn.Conv2d.__init__
 
     def conv2d_constructor_circular(self, *args, **kwargs):
-        return conv2d_constructor(self, *args, padding_mode='circular', **kwargs)
+        return conv2d_constructor(self, *args, padding_mode="circular", **kwargs)
 
     torch.nn.Conv2d.__init__ = conv2d_constructor_circular
 
@@ -355,7 +359,7 @@ def register_buffer(self, name, attr):
 
     if type(attr) == torch.Tensor:
         if attr.device != devices.device:
-            attr = attr.to(device=devices.device, dtype=(torch.float32 if devices.device.type == 'mps' else None))
+            attr = attr.to(device=devices.device, dtype=(torch.float32 if devices.device.type == "mps" else None))
 
     setattr(self, name, attr)
 
