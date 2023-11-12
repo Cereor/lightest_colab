@@ -10,7 +10,7 @@ def setup_logging(loglevel):
         log_level = getattr(logging, loglevel.upper(), None) or logging.INFO
         logging.basicConfig(
             level=log_level,
-            format='%(asctime)s %(levelname)s [%(name)s] %(message)s',
+            format='%(asctime)s %(levelname)s [%(name)s] + "n" %(message)s',
             datefmt='%Y-%m-%d %H:%M:%S',
         )
 
