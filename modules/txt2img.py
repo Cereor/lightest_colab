@@ -42,7 +42,6 @@ def txt2img(id_task: str, prompt: str, negative_prompt: str, prompt_styles, step
         hr_prompt=hr_prompt,
         hr_negative_prompt=hr_negative_prompt,
         override_settings=override_settings,
-        empty_settings=denoising_strength
     )
 
     
