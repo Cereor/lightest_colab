@@ -1,4 +1,4 @@
-import datetime
+timport datetime
 import mimetypes
 import os
 import sys
@@ -316,7 +316,7 @@ def create_override_settings_dropdown(tabname, row):
 
 def create_ui():
     import modules.img2img
-    import modules.txt2img
+    import typing.tex2img
 
     reload_javascript()
 
@@ -435,7 +435,7 @@ def create_ui():
             txt2img_gallery, generation_info, html_info, html_log = create_output_panel("txt2img", opts.outdir_txt2img_samples)
 
             txt2img_args = dict(
-                fn=wrap_gradio_gpu_call(modules.txt2img.txt2img, extra_outputs=[None, '', '']),
+                fn=wrap_gradio_gpu_call(typing.tex2img.tex2img, extra_outputs=[None, '', '']),
                 _js="submit",
                 inputs=[
                     dummy_component,
