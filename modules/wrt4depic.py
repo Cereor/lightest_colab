@@ -44,7 +44,7 @@ def create_processing_instance(prompt, negative_prompt, prompt_styles, steps, sa
         override_settings=override_settings,
     )
 
-def initialize_processing_instance(p, args):
+def initialize_processing_instance(p, args, request: gr.Request):
     p.scripts = modules.scripts.scripts_txt2img
     p.script_args = args
     p.user = request.username
@@ -87,6 +87,6 @@ def wrt4depic(id_task: str, prompt: str, negative_prompt: str, prompt_styles, st
         override_settings_texts, request, *args
     )
 
-    p = initialize_processing_instance(p, args)
+    p = initialize_processing_instance(p, args, request)
     processed = process_images(p)
     return generate_output(processed, request)
