@@ -7,11 +7,11 @@ import warnings
 
 import gradio as gr
 import gradio.utils
-import numpy as np
+from gradio.components.image_editor import Brush
 from PIL import Image, PngImagePlugin  # noqa: F401
 from modules.call_queue import wrap_gradio_gpu_call, wrap_queued_call, wrap_gradio_call
 
-from modules import gradio_extensons  # noqa: F401
+from modules import gradio_extensions  # noqa: F401
 from modules import sd_hijack, sd_models, script_callbacks, ui_extensions, deepbooru, extra_networks, ui_common, ui_postprocessing, progress, ui_loadsave, shared_items, ui_settings, timer, sysinfo, ui_checkpoint_merger, ui_prompt_styles, scripts, sd_samplers, processing, ui_extra_networks
 from modules.ui_components import FormRow, FormGroup, ToolButton, FormHTML, InputAccordion, ResizeHandleRow
 from modules.paths import script_path
@@ -34,7 +34,7 @@ from modules.generation_parameters_copypaste import image_from_url_text
 create_setting_component = ui_settings.create_setting_component
 
 warnings.filterwarnings("default" if opts.show_warnings else "ignore", category=UserWarning)
-warnings.filterwarnings("default" if opts.show_gradio_deprecation_warnings else "ignore", category=gr.deprecation.GradioDeprecationWarning)
+warnings.filterwarnings("default" if opts.show_gradio_deprecation_warnings else "ignore", category=gradio_extensions.GradioDeprecationWarning)
 
 # this is a fix for Windows users. Without it, javascript files will be served with text/html content-type and the browser will not show any UI
 mimetypes.init()
@@ -100,8 +100,8 @@ def calc_resolution_hires(enable, width, height, hr_scale, hr_resize_x, hr_resiz
 
 
 def resize_from_to_html(width, height, scale_by):
-    target_width = int(width * scale_by)
-    target_height = int(height * scale_by)
+    target_width = int(float(width) * scale_by)
+    target_height = int(float(height) * scale_by)
 
     if not target_width or not target_height:
         return "no image selected"
@@ -110,10 +110,12 @@ def resize_from_to_html(width, height, scale_by):
 
 
 def process_interrogate(interrogation_function, mode, ii_input_dir, ii_output_dir, *ii_singles):
-    if mode in {0, 1, 3, 4}:
-        return [interrogation_function(ii_singles[mode]), None]
+     
+    mode = int(mode)
+    if mode in (0, 1, 3, 4):
+        return [interrogation_function(ii_singles[mode]["composite"]), None]
     elif mode == 2:
-        return [interrogation_function(ii_singles[mode]["image"]), None]
+        return [interrogation_function(ii_singles[mode]["composite"]), None]
     elif mode == 5:
         assert not shared.cmd_opts.hide_ui_dir_config, "Launched with --hide-ui-dir-config, batch img2img disabled"
         images = shared.listfiles(ii_input_dir)
@@ -329,7 +331,8 @@ def create_ui():
     with gr.Blocks(analytics_enabled=False) as txt2img_interface:
         toprow = Toprow(is_img2img=False)
 
-        dummy_component = gr.Label(visible=False)
+        dummy_component = gr.Textbox(visible=False)
+        dummy_component_number = gr.Number(visible=False)
 
         extra_tabs = gr.Tabs(elem_id="txt2img_extra_tabs")
         extra_tabs.__enter__()
@@ -368,7 +371,7 @@ def create_ui():
                         with gr.Row(elem_id="txt2img_accordions", elem_classes="accordions"):
                             with InputAccordion(False, label="Hires. fix", elem_id="txt2img_hr") as enable_hr:
                                 with enable_hr.extra():
-                                    hr_final_resolution = FormHTML(value="", elem_id="txtimg_hr_finalres", label="Upscaled resolution", interactive=False, min_width=0)
+                                    hr_final_resolution = FormHTML(value="", elem_id="txtimg_hr_finalres", label="Upscaled resolution")
 
                                 with FormRow(elem_id="txt2img_hires_fix_row1", variant="compact"):
                                     hr_upscaler = gr.Dropdown(label="Upscaler", elem_id="txt2img_hr_upscaler", choices=[*shared.latent_upscale_modes, *[x.name for x in shared.sd_upscalers]], value=shared.latent_upscale_default_mode)

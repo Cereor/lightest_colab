@@ -32,7 +32,7 @@ class ScriptSeed(scripts.ScriptBuiltinUI):
             random_seed = ToolButton(ui.random_symbol, elem_id=self.elem_id("random_seed"), label='Random seed')
             reuse_seed = ToolButton(ui.reuse_symbol, elem_id=self.elem_id("reuse_seed"), label='Reuse seed')
 
-            seed_checkbox = gr.Checkbox(label='Extra', elem_id=self.elem_id("subseed_show"), value=False)
+            seed_checkbox = gr.Checkbox(label='Extra', elem_id=self.elem_id("subseed_show"), value=False, scale=0, min_width=60)
 
         with gr.Group(visible=False, elem_id=self.elem_id("seed_extras")) as seed_extras:
             with gr.Row(elem_id=self.elem_id("subseed_row")):
